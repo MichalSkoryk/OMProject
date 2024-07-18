@@ -1,0 +1,9 @@
+version: '3.7'
+services:
+  sqlserver:
+    build: .
+    environment:
+      - SA_PASSWORD=Str0ngP@ssword
+      - ACCEPT_EULA=Y
+    ports:
+      - "1433:1433"
