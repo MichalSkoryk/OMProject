@@ -1,0 +1,8 @@
+spring.application.name=SuperApp
+
+spring.datasource.url=jdbc:sqlserver://localhost:1433;databaseName=test;encrypt=true;trustServerCertificate=true;
+spring.datasource.driverClassName=com.microsoft.sqlserver.jdbc.SQLServerDriver
+spring.jpa.hibernate.ddl-auto=update
+
+spring.datasource.username=sa
+spring.datasource.password=Str0ngP@ssword

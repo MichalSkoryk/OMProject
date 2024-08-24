@@ -1,0 +1,38 @@
+version: '3.8'
+
+volumes:
+  mssql_data:
+
+services:
+  mssql_db:
+    build: ./database
+    container_name: mssql_db
+    environment:
+      - SA_PASSWORD=w4pNxxD@SF.q_[
+      - ACCEPT_EULA=Y
+    ports:
+      - "1433:1433"
+    volumes:
+      - mssql_data:/var/opt/mssql
+    networks:
+      - backend-database-network
+
+  app:
+    build: .
+    container_name: spring_app
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:sqlserver://mssql_db:1433;databaseName=test;encrypt=true;trustServerCertificate=true;
+      - SPRING_DATASOURCE_USERNAME=sa
+      - SPRING_DATASOURCE_PASSWORD=w4pNxxD@SF.q_[
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mssql_db
+    networks:
+      - backend-database-network
+
+networks:
+  backend-database-network:
+    driver: bridge
+
