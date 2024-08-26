@@ -1,5 +1,10 @@
 FROM mcr.microsoft.com/mssql/server:2022-latest
 
-COPY ./setup.sql /usr/src/app/setup.sql
-COPY ./entrypoint.sh /usr/src/app/entrypoint.sh
-ENTRYPOINT ["/usr/src/app/entrypoint.sh"]
+WORKDIR /usr/src/app
+
+COPY ./setup.sql setup.sql
+COPY ./entrypoint.sh entrypoint.sh
+
+RUN sed -i 's/\r$//' entrypoint.sh
+
+ENTRYPOINT ["./entrypoint.sh"]

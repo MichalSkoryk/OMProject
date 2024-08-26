@@ -33,10 +33,10 @@ ELSE
         ALTER TABLE users
             ADD CONSTRAINT positive_group_count CHECK (group_count > -1)
 
-        INSERT INTO users (group_count, id, first_name, last_name, email, password)
+        INSERT INTO users (group_count, id, first_name, last_name, email, password, role)
         VALUES
-            (2, '4541ee81-b8f5-4ab6-b3b6-5f1f7072df0a', N'Michał', 'Skoryk', 'michal.skoryk@gmail.com', '$2a$10$YZqjzbcvcD5xnHtBuvZ.Quw4yI78YGccluMJzLf8JuLLxkXvQ3EdS'), -- Michals2002
-            (0, '9b991bc5-acb9-4a24-81ce-c3a952d15f6f', 'tester1first', 'tester1last', 'test1@tester.com', '$2a$10$WaYM4Euzk3Hjh9md24rwou.Y9F0y.89MH8.PFVwmb/nklQT0RpxKS'); -- tester1
+            (2, '4541ee81-b8f5-4ab6-b3b6-5f1f7072df0a', N'Michał', 'Skoryk', 'michal.skoryk@gmail.com', '$2a$10$YZqjzbcvcD5xnHtBuvZ.Quw4yI78YGccluMJzLf8JuLLxkXvQ3EdS','USER'), -- Michals2002
+            (0, '9b991bc5-acb9-4a24-81ce-c3a952d15f6f', 'tester1first', 'tester1last', 'test1@tester.com', '$2a$10$WaYM4Euzk3Hjh9md24rwou.Y9F0y.89MH8.PFVwmb/nklQT0RpxKS','USER'); -- tester1
     END
 
 print 'database ready for tests'
