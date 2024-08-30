@@ -39,16 +39,29 @@ ELSE
             (0, '9b991bc5-acb9-4a24-81ce-c3a952d15f6f', 'tester1first', 'tester1last', 'test1@tester.com', '$2a$10$WaYM4Euzk3Hjh9md24rwou.Y9F0y.89MH8.PFVwmb/nklQT0RpxKS','USER'); -- tester1
     END
 
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES
+           WHERE TABLE_CATALOG = 'test'
+             AND TABLE_SCHEMA = 'dbo'
+             AND TABLE_NAME = 'groups')
+    print 'table groups already exists'
+ELSE
+    CREATE TABLE groups (
+                            id   uniqueidentifier NOT NULL,
+                            group_name varchar(255),
+                            code varchar(8),
+                            CONSTRAINT pk_groups PRIMARY KEY (id)
+    )
+
+IF((SELECT COUNT(*) FROM dbo.groups) = 0)
+    INSERT INTO groups (id, group_name, code)
+    VALUES
+        ('6957eaba-ffac-436a-aafb-08398474c440','Test','12345678'),
+        ('37f82009-714a-499c-85e0-1ab8684b6463', 'Test1', '87654321');
+
+
+
 print 'database ready for tests'
 
--- Tworzenie tabeli groups
--- CREATE TABLE groups (
---                         id INT PRIMARY KEY IDENTITY(1,1),
---                         group_name NVARCHAR(100) NOT NULL,
---                         image NVARCHAR(MAX),
---                         code CHAR(8) NOT NULL
--- );
--- GO
 -- -- Tworzenie tabeli memberships
 -- CREATE TABLE memberships (
 --                              membership_id INT PRIMARY KEY IDENTITY(1,1),
