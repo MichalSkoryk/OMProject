@@ -3,8 +3,12 @@ package com.skoryk.superapp.membership;
 import com.skoryk.superapp.model.Membership;
 import com.skoryk.superapp.repository.MembershipRepository;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.mapping.List;
 import org.springframework.stereotype.Service;
 
+import java.sql.Array;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -18,7 +22,7 @@ public class MembershipService {
         return membershipRepository.findByUserId(userId);
     }
 
-    public Optional<Membership> findAllByGroupId(UUID groupId) {
+    public LinkedList<Membership> findAllByGroupId(UUID groupId) {
         return membershipRepository.findByGroupId(groupId);
     }
 
@@ -41,5 +45,9 @@ public class MembershipService {
 
     public void deleteMembership(UUID userId, UUID groupId){
         membershipRepository.deleteMembershipByUserIdAndGroupId(userId, groupId);
+    }
+
+    public boolean isUserInGroup(UUID userId, UUID groupId){
+        return membershipRepository.findByUserIdAndGroupId(userId, groupId).isPresent();
     }
 }

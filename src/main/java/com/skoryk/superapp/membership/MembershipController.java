@@ -17,7 +17,6 @@ public class MembershipController {
         return ResponseEntity.ok(membershipService.findAllByUserId(userId));
     }
 
-
     //If already in the database should return error already created
     /**
      * Called when user joins the group
@@ -28,6 +27,8 @@ public class MembershipController {
             @PathVariable UUID groupId,
             @RequestBody MembershipCreateRequest request
     ){
+        if(membershipService.isUserInGroup(userId, groupId))
+            return ResponseEntity.status(409).body("{\"errorMsg\":\" User with Id '" + userId + "' is already member of the group '" + groupId + "'.\"}");
         return ResponseEntity.status(201).body(membershipService.createMembership(userId, groupId, request));
     }
 
@@ -40,7 +41,6 @@ public class MembershipController {
         return ResponseEntity.ok(membershipService.patchMembership(userId, groupId, request));
     }
 
-
     //Not working probably search error
     @DeleteMapping("/user/{userId}/group/{groupId}")
     public ResponseEntity<Object> deleteUserFromTheGroup(
@@ -51,7 +51,7 @@ public class MembershipController {
         return ResponseEntity.status(204).build();
     }
 
-    //Not Working Probably wrong search in database
+    //Not working why?
     @GetMapping("/group/{groupId}")
     public ResponseEntity<Object> getAllGroupUsers(
             @PathVariable UUID groupId
