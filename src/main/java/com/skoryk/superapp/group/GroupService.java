@@ -16,7 +16,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class GroupService {
     private final GroupRepository groupRepository;
-    private final AuthenticationManager authenticationManager;
 
     public List<Group> findAll(UUID userId) {
         return groupRepository.findAll();

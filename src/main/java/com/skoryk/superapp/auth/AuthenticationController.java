@@ -1,7 +1,6 @@
 package com.skoryk.superapp.auth;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,8 +14,9 @@ public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
 
+
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(
+    public ResponseEntity<RegistrationSuccessfullResponse> register(
             @RequestBody RegisterRequest request
     ){
         return ResponseEntity.ok(authenticationService.register(request));

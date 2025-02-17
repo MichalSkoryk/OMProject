@@ -5,45 +5,60 @@ import com.skoryk.superapp.repository.UserRepository;
 import com.skoryk.superapp.service.JWTService;
 import com.skoryk.superapp.model.Role;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
 
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final JWTService jwtService;
-    private final AuthenticationManager authenticationManager;
+    @Autowired
+    private UserRepository userRepository;
 
-    public AuthenticationResponse register(RegisterRequest request) {
-        var user = User.builder()
-                .firstName(request.getFirstName())
-                .lastName(request.getLastName())
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.USER)
-                .build();
+    @Autowired
+    private JWTService jwtService;
+
+    @Autowired
+    AuthenticationManager authenticationManager;
+
+    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
+
+    public RegistrationSuccessfullResponse register(RegisterRequest request) {
+
+        User user = new User();
+
+        user.setEmail(request.getEmail());
+        user.setPassword(encoder.encode(request.getPassword()));
+        user.setFirstName(request.getFirstName());
+        user.setLastName(request.getLastName());
+        user.setRole(Role.USER);
+        user.setGroupCount(0);
+
         userRepository.save(user);
-        var jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse.builder().token(jwtToken).build();
+        return RegistrationSuccessfullResponse.builder().redirectUrl("https://localhost:8080").build();
 
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        authenticationManager.authenticate(
+        Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
                         request.getPassword()
                 )
         );
-        var user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        var jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse.builder().token(jwtToken).build();
+        if (authentication.isAuthenticated()) {
+            User user = userRepository.findByEmail(request.getEmail());
+            if (user == null) {
+                throw new UsernameNotFoundException(request.getEmail());
+            }
+            String jwtToken =  jwtService.generateToken(request.getEmail());
+            return AuthenticationResponse.builder().token(jwtToken).build();
+        }
+        return AuthenticationResponse.builder().token("Wrong Password").build();
     }
 }

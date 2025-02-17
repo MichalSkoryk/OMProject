@@ -1,6 +1,5 @@
 package com.skoryk.superapp.group;
 
-import com.skoryk.superapp.repository.GroupRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +11,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class GroupController {
 
-    private final GroupRepository groupRepository;
     private final GroupService groupService;
 
     @GetMapping()

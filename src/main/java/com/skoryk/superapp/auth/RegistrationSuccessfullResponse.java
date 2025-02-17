@@ -1,6 +1,5 @@
 package com.skoryk.superapp.auth;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthenticationResponse {
-    private String token;
+public class RegistrationSuccessfullResponse {
+    private String message;
+    private String redirectUrl;
 }
