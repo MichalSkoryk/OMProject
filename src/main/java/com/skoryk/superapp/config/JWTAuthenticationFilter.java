@@ -23,9 +23,6 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     private JWTService jwtService;
 
-//    @Autowired
-//    MyUserDetailsService myUserDetailsService;
-
     @Autowired
     ApplicationContext applicationContext;
 
@@ -39,27 +36,23 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
         throws ServletException, IOException {
 
         String authHeader = request.getHeader("Authorization");
-        String token = null;
-        String userEmail = null;
+        String token;
+        String userEmail;
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             token = authHeader.substring(7);
             userEmail = jwtService.extractUsername(token);
 
             if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-//                 Probable cause next line should be
                  UserDetails userDetails = applicationContext.getBean(MyUserDetailsService.class).loadUserByUsername(userEmail);
-
-//                UserDetails userDetails = myUserDetailsService.loadUserByUsername(userEmail);
-
-                if (jwtService.isTokenValid(token, userDetails)) {
+                 if (jwtService.isTokenValid(token, userDetails)) {
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                             userDetails, null, userDetails.getAuthorities());
                     authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authToken);
                 }
             }
-            filterChain.doFilter(request, response);
         }
+        filterChain.doFilter(request, response);
     }
 }

@@ -26,9 +26,9 @@ public class AuthenticationService {
     @Autowired
     AuthenticationManager authenticationManager;
 
-    private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
+    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
-    public String register(RegisterRequest request) {
+    public RegistrationSuccessfullResponse register(RegisterRequest request) {
 
         User user = new User();
 
@@ -40,7 +40,7 @@ public class AuthenticationService {
         user.setGroupCount(0);
 
         userRepository.save(user);
-        return "ok";
+        return RegistrationSuccessfullResponse.builder().redirectUrl("https://localhost:8080").build();
 
     }
 

@@ -1,7 +1,6 @@
 package com.skoryk.superapp.service;
 
 
-import com.skoryk.superapp.model.Role;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.security.Keys;
@@ -20,7 +19,7 @@ import java.util.function.Function;
 public class JWTService {
 
     private static String secretKey;
-//= "c3c2bcdbb381fcf37dbb25afa19853b40eaff84d51cbd5b9ad730c6654e1f1c763940bf0d66334cd9192a52f50be909ea55ea6a8c6a751fd320f91197b10528f9998d103ed72a6e564d61bb32073091ae9dde760cbdfab4c148376ba105823734a4c772468f17724ac46fc86fb9b9dce29bd039c1e4390cf4a58c2ed13025d43501226db8858c925740e635dd33246fec4f8439de22d4368791e24466e082d5b6feb10ef505095ff5251a7f1413d07d6c3a984039de6216fd9aabdc508a7da76f242e339c6fa04d2c140821b1f675b8985f248e17b21966dea2991cd8b9ff3b01875bb16736b2998af704efc868089e068bf46ef96b41f48a02f7b13e20242ea";
+
     public JWTService () {
         try {
             KeyGenerator keyGenerator = KeyGenerator.getInstance("HmacSHA256");
