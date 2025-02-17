@@ -1,21 +1,18 @@
 package com.skoryk.superapp.service;
 
 
+import com.skoryk.superapp.model.Role;
+import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.security.Keys;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-
-import io.jsonwebtoken.Jwts;
-
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
 
@@ -43,7 +40,7 @@ public class JWTService {
         return claimsTFunction.apply(claims);
     }
 
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(String email) {
 
         Map<String, Object> claims = new HashMap<>();
 
@@ -51,17 +48,17 @@ public class JWTService {
                 .builder()
                 .claims()
                 .add(claims)
-                .subject(userDetails.getUsername())
+                .subject(email)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
                 .and()
-                .signWith(getSignInKey())
+                .signWith(getKey())
                 .compact();
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails){
         final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
+        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
     private boolean isTokenExpired(String token) {
@@ -74,13 +71,13 @@ public class JWTService {
     private Claims extractAllClaims(String token) {
         return Jwts
                 .parser()
-                .verifyWith(getSignInKey())
+                .verifyWith(getKey())
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
     }
 
-    private SecretKey getSignInKey() {
+    private SecretKey getKey() {
         byte[] keyBytes = Base64.getDecoder().decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
