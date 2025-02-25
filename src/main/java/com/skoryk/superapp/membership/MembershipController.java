@@ -1,9 +1,11 @@
 package com.skoryk.superapp.membership;
 
+import com.skoryk.superapp.model.Membership;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 @RestController
@@ -12,15 +14,15 @@ import java.util.UUID;
 public class MembershipController {
     private final MembershipService membershipService;
 
+
     @GetMapping("/user/{userId}")
     public ResponseEntity<Object> getAllMembershipsOfUser(@PathVariable UUID userId){
-        return ResponseEntity.ok(membershipService.findAllByUserId(userId));
+        ArrayList<Membership> userMemberships= membershipService.findAllByUserId(userId);
+        if(userMemberships.isEmpty())
+            return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(userMemberships);
     }
 
-    //If already in the database should return error already created
-    /**
-     * Called when user joins the group
-     */
     @PostMapping("/user/{userId}/group/{groupId}")
     public ResponseEntity<Object> joinUserToTheGroup(
             @PathVariable UUID userId,
@@ -51,11 +53,13 @@ public class MembershipController {
         return ResponseEntity.status(204).build();
     }
 
-    //Not working why?
     @GetMapping("/group/{groupId}")
     public ResponseEntity<Object> getAllGroupUsers(
             @PathVariable UUID groupId
     ){
-        return ResponseEntity.ok(membershipService.findAllByGroupId(groupId));
+        ArrayList<Membership> groupMemberships = membershipService.findAllByGroupId(groupId);
+        if(groupMemberships.isEmpty())
+            return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(groupMemberships);
     }
 }
