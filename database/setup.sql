@@ -92,6 +92,23 @@ CREATE TABLE events
 );
 
 
+-- Creation of table activityType
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES
+           WHERE TABLE_CATALOG = 'test'
+             AND TABLE_SCHEMA = 'dbo'
+             AND TABLE_NAME = 'activity_types')
+    print 'Table activity_types already created'
+ELSE
+    CREATE TABLE activity_types
+    (
+        id            uniqueidentifier NOT NULL,
+        group_id      uniqueidentifier,
+        activity_name varchar(50),
+        state         bit,
+        CONSTRAINT pk_activity_types PRIMARY KEY (id),
+        FOREIGN KEY (group_id) REFERENCES groups(id)
+    )
+
 -- Insert into users table
 IF((SELECT COUNT(*) FROM dbo.users) = 0)
 INSERT INTO users (group_count, id, first_name, last_name, email, password, role)
@@ -107,20 +124,14 @@ VALUES
     ('37f82009-714a-499c-85e0-1ab8684b6463', 'Test1', '87654321');
 
 -- Insert into memberships
-IF((SELECT COUNT(*) FROM dbo.groups) = 0)
+IF((SELECT COUNT(*) FROM dbo.memberships) = 0)
 INSERT INTO memberships (user_id, group_id, role)
 VALUES
     ('4541ee81-b8f5-4ab6-b3b6-5f1f7072df0a','6957eaba-ffac-436a-aafb-08398474c440','0'),
     ('9b991bc5-acb9-4a24-81ce-c3a952d15f6f', '37f82009-714a-499c-85e0-1ab8684b6463', '1');
 
-
--- Insert into events
--- IF((SELECT COUNT(*) FROM dbo.events) = 0)
--- INSERT INTO events(event_id, group_id, start_time, end_time, name, description, creator, color)
--- VALUES
---     ('', '', '', '', '', '', '', ''),
---     ('', '', '', '', '', '', '', ''),
---     ('', '', '', '', '', '', '', ''),
---     ('', '', '', '', '', '', '', ''),
---     ('', '', '', '', '', '', '', ''),
---     ('', '', '', '', '', '', '', '');
+-- Insert into activity_types
+IF((SELECT COUNT(*) FROM dbo.activity_types) = 0)
+    INSERT INTO activity_types (id, group_id, activity_name, state)
+    VALUES
+        ('93432aa9-07a0-4e45-b87e-50cb257fb8bf','6957eaba-ffac-436a-aafb-08398474c440', 'TEST Activity', true);
