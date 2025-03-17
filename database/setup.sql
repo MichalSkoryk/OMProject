@@ -75,21 +75,21 @@ IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES
              AND TABLE_NAME = 'events')
         print 'Table events already created'
 ELSE
-CREATE TABLE events
-(
-    event_id uniqueidentifier NOT NULL,
-    group_id uniqueidentifier NOT NULL,
-    start_time DATETIME NOT NULL,
-    end_time DATETIME NOT NULL,
-    name VARCHAR(100) NOT NULL,
-    description VARCHAR(200),
-    creator UNIQUEIDENTIFIER NOT NULL,
-    color VARCHAR(50),
+    CREATE TABLE events
+    (
+        event_id uniqueidentifier NOT NULL,
+        group_id uniqueidentifier NOT NULL,
+        start_time DATETIME NOT NULL,
+        end_time DATETIME NOT NULL,
+        name VARCHAR(100) NOT NULL,
+        description VARCHAR(200),
+        creator UNIQUEIDENTIFIER NOT NULL,
+        color VARCHAR(50),
 
-    CONSTRAINT pk_events PRIMARY KEY (event_id),
-    FOREIGN KEY (creator) REFERENCES users(id),
-    FOREIGN KEY (group_id) REFERENCES groups(id)
-);
+        CONSTRAINT pk_events PRIMARY KEY (event_id),
+        FOREIGN KEY (creator) REFERENCES users(id),
+        FOREIGN KEY (group_id) REFERENCES groups(id)
+    );
 
 
 -- Creation of table activityType
@@ -108,6 +108,30 @@ ELSE
         CONSTRAINT pk_activity_types PRIMARY KEY (id),
         FOREIGN KEY (group_id) REFERENCES groups(id)
     )
+
+
+-- Creation of table propositions
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES
+           WHERE TABLE_CATALOG = 'test'
+             AND TABLE_SCHEMA = 'dbo'
+             AND TABLE_NAME = 'propositions')
+    print 'Table propositions already created'
+ELSE
+    CREATE TABLE propositions
+    (
+        id             uniqueidentifier NOT NULL,
+        user_id        uniqueidentifier,
+        group_id       uniqueidentifier,
+        activity_type  uniqueidentifier,
+        start_datetime datetime,
+        end_datetime   datetime,
+
+        CONSTRAINT pk_propositions PRIMARY KEY (id),
+        FOREIGN KEY (user_id) REFERENCES users(id),
+        FOREIGN KEY (group_id) REFERENCES groups(id),
+        FOREIGN KEY (activity_type) REFERENCES activity_types(id),
+    );
+
 
 -- Insert into users table
 IF((SELECT COUNT(*) FROM dbo.users) = 0)

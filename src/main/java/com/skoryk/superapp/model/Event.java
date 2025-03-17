@@ -14,6 +14,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class Event {
     @Id
+    @Getter
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     @Getter

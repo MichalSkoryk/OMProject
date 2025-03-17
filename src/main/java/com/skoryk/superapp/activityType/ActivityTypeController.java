@@ -10,7 +10,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/activityType")
 @RequiredArgsConstructor
-public class activityTypeController {
+public class ActivityTypeController {
     private final ActivityTypeService activityService;
     private final GroupRepository groupRepository;
 
