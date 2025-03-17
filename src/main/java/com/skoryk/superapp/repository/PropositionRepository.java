@@ -11,7 +11,6 @@ import java.util.UUID;
 public interface PropositionRepository extends CrudRepository<Proposition, UUID> {
 
     Optional<Proposition> findById(UUID id);
-    //TODO: Create Endpoint for this feature
     ArrayList<Proposition> findByUserIdAndGroupIdAndActivityType(UUID userId, UUID groupId, UUID activityType);
     ArrayList<Proposition> findByGroupIdAndActivityType(UUID groupId, UUID activityTypeId);
 }

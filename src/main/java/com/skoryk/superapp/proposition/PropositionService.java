@@ -24,6 +24,10 @@ public class PropositionService {
         return propositionRepository.findByGroupIdAndActivityType(groupId, activityTypeId);
     }
 
+    public ArrayList<Proposition> getPropositionsOfUserInGroup(UUID userId, UUID groupId, UUID activityType) {
+        return propositionRepository.findByUserIdAndGroupIdAndActivityType(userId, groupId, activityType);
+    }
+
     public Proposition createProposition(PropositionCreateRequest propositionCreateRequest) {
 
         Proposition proposition = Proposition

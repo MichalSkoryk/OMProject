@@ -30,6 +30,16 @@ public class PropositionController {
         return ResponseEntity.ok(propositionService.getPropositionsFromGroupByIdActivity(groupId, activityTypeId));
     }
 
+    @GetMapping("user/{userId}/group/{groupId}/activityType/{activityType}")
+    public ResponseEntity<ArrayList<Proposition>> getPropositionsOfUserInGroup(
+            @PathVariable UUID userId,
+            @PathVariable UUID groupId,
+            @PathVariable UUID activityType
+    ) {
+        return ResponseEntity.ok(propositionService.getPropositionsOfUserInGroup(userId, groupId, activityType));
+    }
+
+
     @PostMapping("/")
     public ResponseEntity<Object> createProposition(@RequestBody PropositionCreateRequest propositionCreateRequest) {
         if(propositionCreateRequest.getUserId() == null)
